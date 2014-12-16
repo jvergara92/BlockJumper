@@ -21,6 +21,9 @@ function setup() {
   strokeWeight(3);
   textSize(width/10);
   textAlign(CENTER);
+  socket.on('jump', function(data){
+      console.log(data);
+    });
 }
 
 function draw() {

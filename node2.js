@@ -17,13 +17,13 @@ var io = require('socket.io')(server);
 io.on('connection',
   // We are given a websocket object in our function
   function (socket) {
-
-  	socket.on('jump', function(data){
-  		console.log(data);
-  	})
   
     console.log("We have a new client: " + socket.id);
-  
+    
+    socket.on('jump', function(data){
+      console.log(data);
+      socket.broadcast.emit('jump',data);
+    });
     // When this user emits, client side: socket.emit('otherevent',some data);
     socket.on('mouse',
       function(data) {
