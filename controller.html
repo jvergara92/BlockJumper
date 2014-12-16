@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <title>Polygon Window - by Abe Pazos for uncontext.com</title>
+  <title>Controller</title>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.11/p5.js"></script>
   <style type="text/css">
     html,body { padding: 0px; margin:0px; overflow:hidden; }
@@ -10,19 +10,31 @@
 <body>
 
 <script>
-var beginMillis = 0;
-// used to find out if it's increasing or not
-var lastF = 0;
-var data;
+var buttonColor = 255;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  rectMode(CENTER);
-  noStroke();
-  socket = io.connect("http://localhost:8080");
+  ellipseMode(CENTER);
+  background(255,100,100);
+  strokeWeight(3);
+  textSize(width/10);
+  textAlign(CENTER);
 }
 
 function draw() {
+  fill(buttonColor);
+  ellipse(width/2,height/2,width/2,width/2);
+  fill(0);
+  text("JUMP!",width/2,height/2);
+}
+
+function mousePressed(){
+  if (mouseX > width/4 && mouseX < 3*width/4 && mouseY < height/2+width/2 && mouseY > height/2-width/2)
+    buttonColor =155;
+}
+
+function mouseReleased(){
+  buttonColor = 255;
 }
 
 
