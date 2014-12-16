@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <title>Polygon Window - by Abe Pazos for uncontext.com</title>
+  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.11/p5.js"></script>
+  <style type="text/css">
+    html,body { padding: 0px; margin:0px; overflow:hidden; }
+  </style>
+</head>
+<body>
+
+<script>
+var beginMillis = 0;
+// used to find out if it's increasing or not
+var lastF = 0;
+var data;
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  rectMode(CENTER);
+  noStroke();
+  socket = io.connect("http://localhost:8080");
+}
+
+function draw() {
+}
+
+
+</script>
+
+</body>
+</html>
