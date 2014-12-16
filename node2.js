@@ -18,7 +18,7 @@ function handleRequest(req, res) {
   
   // If blank let's ask for index.html
   if (pathname == '/') {
-    pathname = '/index.html';
+    pathname = '/controller.html';
   }
   
   // Ok what's our file extension
@@ -61,7 +61,7 @@ io.sockets.on('connection',
   // We are given a websocket object in our function
   function (socket) {
 
-  	socket.on('player', function(data){
+  	socket.on('jump', function(data){
   		console.log(data);
   	})
   

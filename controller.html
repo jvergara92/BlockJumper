@@ -3,6 +3,7 @@
   <meta charset="utf-8">
   <title>Controller</title>
   <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.11/p5.js"></script>
+   <script language="javascript" type="text/javascript" src="/socket.io/socket.io.js"></script>
   <style type="text/css">
     html,body { padding: 0px; margin:0px; overflow:hidden; }
   </style>
@@ -13,6 +14,7 @@
 var buttonColor = 255;
 
 function setup() {
+  socket = io.connect('http://localhost:8080');
   createCanvas(windowWidth, windowHeight);
   ellipseMode(CENTER);
   background(255,100,100);
@@ -30,7 +32,11 @@ function draw() {
 
 function mousePressed(){
   if (mouseX > width/4 && mouseX < 3*width/4 && mouseY < height/2+width/2 && mouseY > height/2-width/2)
+  {
     buttonColor =155;
+    data = {jump:true};
+    socket.emit('jump', data);
+  }
 }
 
 function mouseReleased(){

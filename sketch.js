@@ -22,15 +22,13 @@ function mousePressed() {
   ellipse(mouseX,mouseY,80,80);
   // Send the mouse coordinates
   sendmouse(mouseX,mouseY);
-  sendPlayer();
+  newPlayer();
   console.log(players.length);
 
 }
 
-function sendPlayer(){
+function newPlayer(){
 	players[players.length]=new Player(players.length+1);
-	data = players[players.length-1];
-	socket.emit('player',data);
 }
 
 // Function for sending to the socket
