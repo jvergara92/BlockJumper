@@ -1,4 +1,5 @@
 var buttonColor = 255;
+var ID;
 
 function setup() {
   socket = io.connect('http://localhost:8080');
@@ -19,6 +20,12 @@ function setup() {
       function(data){
         console.log("got: jumping!"+data.jump);
       });
+  socket.on('id',
+    function(data){
+      ID = data;
+      console.log(ID);
+      joined(true,ID);
+    })
 }
 
 function draw() {
@@ -38,6 +45,14 @@ function mousePressed(){
 
 function mouseReleased(){
   buttonColor = 255;
+}
+
+function joined(isNewAvatar,ID){
+  var data = {
+    newAvatar:isNewAvatar,
+    sID:ID
+  };
+  socket.emit('joined', data);
 }
 
 function sendJump(isJumping){

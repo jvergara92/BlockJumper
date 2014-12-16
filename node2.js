@@ -17,6 +17,8 @@ var io = require('socket.io')(server);
 io.on('connection',
   // We are given a websocket object in our function
   function (socket) {
+    
+    socket.emit('id', socket.id);
   
     console.log("We have a new client: " + socket.id);
     
@@ -33,7 +35,13 @@ io.on('connection',
 
       }
     );
-    
+
+    socket.on('joined', function(data)
+    {
+        console.log("Player "+data.sID+" is requesting avatar creation: "+data.newAvatar);
+        socket.broadcast.emit('joined',data);
+      }
+    );
     // When this user emits, client side: socket.emit('otherevent',some data);
     socket.on('mouse',
       function(data) {

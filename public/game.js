@@ -3,6 +3,7 @@ var block = new Block();
 var players = [];
 	
 function setup() {
+	noStroke();
   	createCanvas(windowWidth, windowHeight);
   	background(100);
   	socket = io.connect('http://localhost:8080');
@@ -18,37 +19,22 @@ function setup() {
       function(data){
         console.log("jumping!"+data.jump);
       });
+  socket.on('joined', function(data){
+  		newPlayer();
+  });
 }
 
 function mousePressed() {
   // Draw some white circles
   fill(255);
-  noStroke();
   ellipse(mouseX,mouseY,80,80);
   // Send the mouse coordinates
-  sendmouse(mouseX,mouseY);
-  newPlayer();
   console.log(players.length);
 
 }
 
 function newPlayer(){
 	players[players.length]=new Player(players.length+1);
-}
-
-// Function for sending to the socket
-function sendmouse(xpos, ypos) {
-  // We are sending!
-  console.log("sendmouse: " + xpos + " " + ypos);
-  
-  // Make a little object with  and y
-  var data = {
-    x: xpos,
-    y: ypos
-  };
-
-  // Send that object to the socket
-  socket.emit('mouse',data);
 }
 
 function draw(){
@@ -73,6 +59,7 @@ function Player(playerNum) {
 
 Player.prototype.update = function(){
 	rect(this.playerNum*(width/25)+40, height-30,30,30);
+	text(this.playerNum,this.playerNum*(width/25)+45, height-13);
 }
 
 //Block Class
