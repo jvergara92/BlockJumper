@@ -6,13 +6,18 @@ function setup() {
   	createCanvas(windowWidth, windowHeight);
   	background(100);
   	socket = io.connect('http://localhost:8080');
+  	
   	socket.on('mouse',
-  		function(data){
-  			console.log("got: "+data.x+" "+data.y);
-  			fill(0,0,255);
-  			noStroke();
-  			ellipse(data.x,data.y,80,80);
-  		});
+      function(data){
+        console.log("got: "+data.x+" "+data.y);
+        fill(0,0,255);
+        noStroke();
+        ellipse(data.x,data.y,80,80);
+      });
+  socket.on('jump', 
+      function(data){
+        console.log("jumping!"+data.jump);
+      });
 }
 
 function mousePressed() {

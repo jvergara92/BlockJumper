@@ -1,53 +1,12 @@
-<!DOCTYPE html>
 <html>
-<head>
-  <title>Controller</title>
- <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
-  <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.3.11/p5.js"></script>
-  <style type="text/css">
+  <head>
+    <style>
     html,body { padding: 0px; margin:0px; overflow:hidden; }
   </style>
-</head>
-<body>
-
-<script>
-var buttonColor = 255;
-
-function setup() {
-  socket = io.connect('http://localhost:8080');
-  createCanvas(windowWidth, windowHeight);
-  ellipseMode(CENTER);
-  background(255,100,100);
-  strokeWeight(3);
-  textSize(width/10);
-  textAlign(CENTER);
-  socket.on('jump', function(data){
-      console.log(data);
-    });
-}
-
-function draw() {
-  fill(buttonColor);
-  ellipse(width/2,height/2,width/2,width/2);
-  fill(0);
-  text("JUMP!",width/2,height/2);
-}
-
-function mousePressed(){
-  if (mouseX > width/4 && mouseX < 3*width/4 && mouseY < height/2+width/2 && mouseY > height/2-width/2)
-  {
-    buttonColor =155;
-    data = {jump:true};
-    socket.emit('jump', data);
-  }
-}
-
-function mouseReleased(){
-  buttonColor = 255;
-}
-
-
-</script>
-
-</body>
+    <script language="javascript" type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.2.9/p5.min.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+    <script language="javascript" type="text/javascript" src="controller.js"></script>
+  </head>
+  <body>
+  </body>
 </html>
