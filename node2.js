@@ -1,9 +1,9 @@
 var path = require('path');
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app);
+var server = require('http').Server(app);
 app.use(express.static(path.join(__dirname, 'public')));
-app.listen(8080);
+server.listen(8080);
 
 // Using the filesystem module
 
