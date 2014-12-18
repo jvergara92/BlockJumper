@@ -6,6 +6,7 @@ function setup() {
 	noStroke();
   	createCanvas(windowWidth, windowHeight);
   	background(100);
+
   	socket = io.connect('http://localhost:8080');
   	
   	socket.on('mouse',
@@ -17,10 +18,43 @@ function setup() {
       });
   socket.on('jump', 
       function(data){
-        console.log("jumping!"+data.jump);
+        console.log("User:"+data.sID +" is jumping = "+data.jump);
+        for (var i=0; i<players.length; i++){
+        	if(players[i].id===data.sID)
+        	{
+        		players[i].jumping = true;
+        	}
+        }
       });
   socket.on('joined', function(data){
-  		newPlayer();
+  		//Fill in empty spaces
+  		for (var i=0; i<players.length; i++)
+  		{
+  			if (!players[i].active){
+  				players[i].active = true;
+  				players[i].id = data.sID;
+  				var data = {
+  					id:players[i].id,
+  					playerNum:players[i].playerNum
+  				};
+  				socket.emit('playerData', data);
+  				return;
+  			}
+  		}
+  		//Else: create new
+  		newPlayer(data.sID);
+  		var data = {
+  					id:players[players.length-1].id,
+  					playerNum:players[players.length-1].playerNum
+  				};
+  				socket.emit('playerData', data);
+  	});
+  socket.on('left', function(data){
+      for (var i=0; i<players.length; i++){
+        if (players[i].id === data) {
+        	players[i].active = false;
+        }
+      }
   });
 }
 
@@ -28,38 +62,109 @@ function mousePressed() {
   // Draw some white circles
   fill(255);
   ellipse(mouseX,mouseY,80,80);
-  // Send the mouse coordinates
-  console.log(players.length);
 
 }
 
-function newPlayer(){
-	players[players.length]=new Player(players.length+1);
+function newPlayer(id){
+	players[players.length]=new Player(availableNum(players), id);
+	console.log("new player: "+id);
 }
 
 function draw(){
+	rectMode(CORNER);
   	background(100);
   	block.update();
-  	for (var i=0; i<players.length; i++)
+  	for (var i=0; i<players.length; i++){
+  		if (players[i].active)
   		players[i].update();
+  	}
 }
 
 //Player Class
-function Player(playerNum) {
+function Player(playerNum, id) {
+	this.active = true;
 	this.playerNum = playerNum;
 	this.x = playerNum * 30 + 45;
 	this.y = height-30;
-	this.gravity = .8;
-	this.speed = 0;
+	this.id = id;
+	this.gravity = 1.1;
+	this.speed = 18;
 	this.jumping = false;
 	this.score = 0;
 	this.destroyCounter = 0;
+	this.stalling = false;
 	this.stallCount = 0;
 }
 
 Player.prototype.update = function(){
-	rect(this.playerNum*(width/25)+40, height-30,30,30);
-	text(this.playerNum,this.playerNum*(width/25)+45, height-13);
+	if (this.stalling) this.stallCount++;
+	if (this.stallCount > 4){
+		this.stallCount = 0;
+		this.stalling = false;
+	}
+	if (!this.collide()){
+		fill(255,102,0);
+		rect(this.playerNum*(width/25)+40, this.y,30,30);
+	}
+	else {
+		fill(255);
+	}
+	text(this.playerNum,this.playerNum*(width/25)+45, this.y+17);
+	if(this.collide()){
+		console.log("player: "+this.playerNum+" had a collision");
+	}
+	/*else
+		fill(255,255,0);*/
+	this.jump();
+	this.incScore();
+}
+
+Player.prototype.jump = function(){
+	if (this.jumping)
+    {
+      this.y-=this.speed;
+      this.speed-=this.gravity;
+      if (this.y>=height-30)
+      {
+        this.y=height-30;
+        this.speed =18;
+        this.jumping = false;
+      }
+    }
+}
+
+Player.prototype.collide = function(){
+    if (block.x >= this.x && block.x <= this.x+30
+    && this.y+30 > block.y && block.y != 0)
+    {
+      this.sendScore();	
+      this.score = 0;
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+}
+
+Player.prototype.incScore = function(){
+    if (block.x >= this.x && block.x <= this.x+30
+    && this.y+30 < block.y && this.stalling === false)
+    {
+    this.score++;
+    this.stalling = true;
+    console.log("Player "+this.playerNum+"'s score: "+ this.score);
+    this.sendScore();
+    }
+}
+
+Player.prototype.sendScore = function()
+{
+	var data={
+    	id:this.id,
+    	score:this.score
+    };
+    socket.emit('incScore', data);
 }
 
 //Block Class
@@ -73,8 +178,8 @@ function Block(){
 }
 
 Block.prototype.update = function(){
-	this.move();
 	fill(100,100,255);
+	this.move();
 	rect(this.x,this.y,40,40);
 	if (!(this.y>=height-40)) this.speed+=this.acceleration;
 }
@@ -124,7 +229,18 @@ Block.prototype.move = function(){
 	}
 }
 
+function availableNum(arr){
+	if (arr.length >0){
+		for(var i=0; i<arr.length; i++){
+			if (!arr[i].active){
+				console.log("INHERE");
+				console.log(arr[i].playerNum);
+				arr[i].active = true;
+				return[i+1]; //return playerNum
+			}
+		}
+		return arr.length+1; //If all previous are active
+	}
+	return 1; //if there are no players
+}
 
-	
- 
-   

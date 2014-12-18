@@ -1,0 +1,82 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', 'aws-sdl' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose cache add [ 'aws-sdl', null ]
+5 verbose cache add name=undefined spec="aws-sdl" args=["aws-sdl",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'aws-sdl',
+6 verbose parsed url   path: 'aws-sdl',
+6 verbose parsed url   href: 'aws-sdl' }
+7 silly lockFile b3e6c76d-aws-sdl aws-sdl
+8 verbose lock aws-sdl /Users/vergaraj/.npm/b3e6c76d-aws-sdl.lock
+9 silly lockFile b3e6c76d-aws-sdl aws-sdl
+10 silly lockFile b3e6c76d-aws-sdl aws-sdl
+11 verbose addNamed [ 'aws-sdl', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 4a155841-aws-sdl aws-sdl@
+14 verbose lock aws-sdl@ /Users/vergaraj/.npm/4a155841-aws-sdl.lock
+15 silly addNameRange { name: 'aws-sdl', range: '*', hasData: false }
+16 verbose request where is /aws-sdl
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id ef8f2426dff0fbab
+19 verbose url raw /aws-sdl
+20 verbose url resolving [ 'https://registry.npmjs.org/', './aws-sdl' ]
+21 verbose url resolved https://registry.npmjs.org/aws-sdl
+22 verbose request where is https://registry.npmjs.org/aws-sdl
+23 info trying registry request attempt 1 at 22:28:15
+24 http GET https://registry.npmjs.org/aws-sdl
+25 http 404 https://registry.npmjs.org/aws-sdl
+26 verbose headers { date: 'Thu, 18 Dec 2014 03:28:16 GMT',
+26 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 verbose headers   'content-type': 'application/json',
+26 verbose headers   'cache-control': 'max-age=0',
+26 verbose headers   'content-length': '52',
+26 verbose headers   'accept-ranges': 'bytes',
+26 verbose headers   via: '1.1 varnish',
+26 verbose headers   age: '0',
+26 verbose headers   'x-served-by': 'cache-iad2133-IAD',
+26 verbose headers   'x-cache': 'MISS',
+26 verbose headers   'x-cache-hits': '0',
+26 verbose headers   'x-timer': 'S1418873295.721967,VS0,VE351',
+26 verbose headers   'keep-alive': 'timeout=10, max=50',
+26 verbose headers   connection: 'Keep-Alive' }
+27 silly registry.get cb [ 404,
+27 silly registry.get   { date: 'Thu, 18 Dec 2014 03:28:16 GMT',
+27 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+27 silly registry.get     'content-type': 'application/json',
+27 silly registry.get     'cache-control': 'max-age=0',
+27 silly registry.get     'content-length': '52',
+27 silly registry.get     'accept-ranges': 'bytes',
+27 silly registry.get     via: '1.1 varnish',
+27 silly registry.get     age: '0',
+27 silly registry.get     'x-served-by': 'cache-iad2133-IAD',
+27 silly registry.get     'x-cache': 'MISS',
+27 silly registry.get     'x-cache-hits': '0',
+27 silly registry.get     'x-timer': 'S1418873295.721967,VS0,VE351',
+27 silly registry.get     'keep-alive': 'timeout=10, max=50',
+27 silly registry.get     connection: 'Keep-Alive' } ]
+28 silly lockFile 4a155841-aws-sdl aws-sdl@
+29 silly lockFile 4a155841-aws-sdl aws-sdl@
+30 error 404 404 Not Found: aws-sdl
+30 error 404
+30 error 404 'aws-sdl' is not in the npm registry.
+30 error 404 You should bug the author to publish it
+30 error 404
+30 error 404 Note that you can also install from a
+30 error 404 tarball, folder, or http url, or git url.
+31 error System Darwin 14.0.0
+32 error command "node" "/usr/local/bin/npm" "install" "aws-sdl"
+33 error cwd /Users/vergaraj/Documents/Thesis
+34 error node -v v0.10.33
+35 error npm -v 1.4.28
+36 error code E404
+37 verbose exit [ 1, true ]

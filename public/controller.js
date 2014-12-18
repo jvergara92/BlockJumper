@@ -1,5 +1,7 @@
 var buttonColor = 255;
 var ID;
+var score=0;
+var playerNum;
 
 function setup() {
   socket = io.connect('http://localhost:8080');
@@ -7,7 +9,6 @@ function setup() {
   ellipseMode(CENTER);
   background(255,100,100);
   strokeWeight(3);
-  textSize(width/10);
   textAlign(CENTER);
   socket.on('mouse',
       function(data){
@@ -16,6 +17,11 @@ function setup() {
         noStroke();
         ellipse(data.x,data.y,80,80);
       });
+  socket.on('playerData', function(data){
+    if (data.id === ID){
+      playerNum = data.playerNum;
+    }
+  });
   socket.on('jump', 
       function(data){
         console.log("got: jumping!"+data.jump);
@@ -25,14 +31,23 @@ function setup() {
       ID = data;
       console.log(ID);
       joined(true,ID);
-    })
+    });
+  socket.on('incScore', function(data){
+    if (data.id === ID){
+      score = data.score;
+    }
+  });
 }
 
 function draw() {
   fill(buttonColor);
   ellipse(width/2,height/2,width/2,width/2);
   fill(0);
-  text("JUMP!",width/2,height/2);
+  textSize(width/10);
+  text("JUMP!",width/2,height/2+height/20);
+  textSize(width/20);
+  text("Score: "+score,width/2,height/2+height/4);
+  text("Player "+playerNum,width/2,height/2-height/4);
 }
 
 function mousePressed(){
@@ -56,7 +71,9 @@ function joined(isNewAvatar,ID){
 }
 
 function sendJump(isJumping){
-  var data = {jump:isJumping};
+  var data = {jump:isJumping,
+    sID:ID
+    };
     console.log("sending: "+data.jump);
     socket.emit('jump', data);
 }

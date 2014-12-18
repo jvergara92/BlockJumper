@@ -5,6 +5,7 @@ var server = require('http').Server(app);
 app.use(express.static(path.join(__dirname, 'public')));
 server.listen(8080);
 
+
 // Using the filesystem module
 
 
@@ -59,6 +60,15 @@ io.on('connection',
     
     socket.on('disconnect', function() {
       console.log("Client has disconnected");
+      socket.broadcast.emit('left', socket.id)
+    });
+
+    socket.on('incScore', function(data){
+      socket.broadcast.emit('incScore',data);
+    });
+
+    socket.on('playerData', function(data){
+      socket.broadcast.emit('playerData', data);
     });
   }
 );
