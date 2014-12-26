@@ -2,12 +2,14 @@ var buttonColor = 255;
 var ID;
 var score=0;
 var playerNum;
+var r,g,b;
 
 function setup() {
+  r=random(0,255); g=random(0,155); b=random(150,255);
   socket = io.connect('http://localhost:8080');
   createCanvas(windowWidth, windowHeight);
   ellipseMode(CENTER);
-  background(255,100,100);
+  background(r,g,b);
   strokeWeight(3);
   textAlign(CENTER);
   socket.on('mouse',
@@ -40,6 +42,7 @@ function setup() {
 }
 
 function draw() {
+  background(r,g,b);
   fill(buttonColor);
   ellipse(width/2,height/2,width/2,width/2);
   fill(0);
@@ -65,7 +68,10 @@ function mouseReleased(){
 function joined(isNewAvatar,ID){
   var data = {
     newAvatar:isNewAvatar,
-    sID:ID
+    sID:ID,
+    R:r,
+    G:g,
+    B:b
   };
   socket.emit('joined', data);
 }

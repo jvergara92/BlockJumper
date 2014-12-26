@@ -1,11 +1,11 @@
 var socket;
 var block = new Block();
 var players = [];
+var scoreBoard = [];
+var SCOREBOARD = [{"player":null,"score":null}];
 	
 function setup() {
-	noStroke();
   	createCanvas(windowWidth, windowHeight);
-  	background(100);
 
   	socket = io.connect('http://localhost:8080');
   	
@@ -13,7 +13,6 @@ function setup() {
       function(data){
         console.log("got: "+data.x+" "+data.y);
         fill(0,0,255);
-        noStroke();
         ellipse(data.x,data.y,80,80);
       });
   socket.on('jump', 
@@ -32,6 +31,7 @@ function setup() {
   		{
   			if (!players[i].active){
   				players[i].active = true;
+  				players[i].R = data.R; players[i].G = data.G; players[i].B = data.B;
   				players[i].id = data.sID;
   				var data = {
   					id:players[i].id,
@@ -42,7 +42,7 @@ function setup() {
   			}
   		}
   		//Else: create new
-  		newPlayer(data.sID);
+  		newPlayer(data.sID,data.R,data.G,data.B);
   		var data = {
   					id:players[players.length-1].id,
   					playerNum:players[players.length-1].playerNum
@@ -53,41 +53,43 @@ function setup() {
       for (var i=0; i<players.length; i++){
         if (players[i].id === data) {
         	players[i].active = false;
+        	players[i].score = 0;
         }
       }
   });
 }
 
-function mousePressed() {
-  // Draw some white circles
-  fill(255);
-  ellipse(mouseX,mouseY,80,80);
-
-}
-
-function newPlayer(id){
-	players[players.length]=new Player(availableNum(players), id);
+function newPlayer(id,r,g,b){
+	players[players.length]=new Player(availableNum(players), id,r,g,b);
 	console.log("new player: "+id);
 }
 
 function draw(){
+	noStroke();
 	rectMode(CORNER);
-  	background(100);
+  	background(200,80,100);
+  	displayScoreBoard();
   	block.update();
   	for (var i=0; i<players.length; i++){
   		if (players[i].active)
-  		players[i].update();
+  		{
+  			scoreBoard[i] = players[i].score;
+  			players[i].update();
+  		}
   	}
 }
 
 //Player Class
-function Player(playerNum, id) {
+function Player(playerNum, id,r,g,b) {
 	this.active = true;
 	this.playerNum = playerNum;
 	this.x = playerNum * 30 + 45;
 	this.y = height-30;
 	this.id = id;
 	this.gravity = 1.1;
+	this.R=r;
+	this.G=g;
+	this.B=b;
 	this.speed = 18;
 	this.jumping = false;
 	this.score = 0;
@@ -103,13 +105,15 @@ Player.prototype.update = function(){
 		this.stalling = false;
 	}
 	if (!this.collide()){
-		fill(255,102,0);
+		fill(this.R,this.G,this.B);
 		rect(this.playerNum*(width/25)+40, this.y,30,30);
 	}
 	else {
 		fill(255);
 	}
-	text(this.playerNum,this.playerNum*(width/25)+45, this.y+17);
+	fill(0);
+	textSize(14);
+	text(this.playerNum,this.playerNum*(width/25)+50, this.y+17);
 	if(this.collide()){
 		console.log("player: "+this.playerNum+" had a collision");
 	}
@@ -243,4 +247,20 @@ function availableNum(arr){
 	}
 	return 1; //if there are no players
 }
+
+var displayScoreBoard = function(){
+	textFont("Helvetica");
+	textAlign(CENTER);
+	var startHeight = 70;
+	fill(255);
+	textSize(20);
+
+	for(var i=0; i<scoreBoard.length; i++){
+		
+	
+		text("Player "+players[i].playerNum+" ....... "+players[i].score,
+			width/2, startHeight+= 28);
+	}
+}
+
 
